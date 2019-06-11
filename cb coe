@@ -1,0 +1,323 @@
+학교 생활 중에 불편한 점을 생각하던 중에 과제연구 시 기자재나 실험 기구를 사용할 떄 사용하는 순서 및 시간을 혼동하는 경우가 많아 순서가 밀리고 원활한 실험기기 사용이 불가능 하였다. 
+
+위와 같은 점을 보완하기 위해 클린벤치 이용 시 자신의 이름과 사용하고 싶은 클린벤치 종류(2인용 혹은 1인용)을 기입하면 Queue 함수를 이용하여 list에 쌓이게 되고, 이를 통해 순서대로 클린벤치를 이용할 수 있게한다. 자신이 언제 이용할 수 있는지 확인할 수 있도록 PrinterQueue 를 활용하여 팀명을 검색하면 이용까지 얼마나 남았는지 혹은 이용종료까지 몇 분 남았는지 알 수 있도록 한다. 
+
+
+class cleanbenchQ:
+   def __init__(self):
+       self.items1=[]
+       self.items2=[]
+       self.cl1=0
+       self.cl2=0
+   def standby1(self, item):
+       self.cl1+=1
+       self.items1.insert(0, item)
+   def standby2(self, item):
+       self.cl2+=1
+       self.items2.insert(0, item)
+   def Afteruse1(self):
+       a = self.items1.pop()
+       self.cl1-=1
+       return a
+   def Afteruse2(self):
+       b = self.items2.pop()
+       self.cl2-=1
+       return b
+   def isEmpty1(self):
+       return self.items1==[]
+   def isEmpty2(self):
+       return self.items2==[]
+   def info1(self):
+       print('1인용 클린벤치 사용 팀은', self.items1[len(self.items1)],'이고', self.cl1,'팀 대기중임' ``
+             ,self.items1[len(self.items1)-1],'팀 대기하셈')
+   def info2(self):
+       print('2인용 클린벤치 사용 팀은', self.items2[len(self.items2)],'이고', self.cl2,'팀 대기중임' ``
+            ,self.items2[len(self.items2)-1],'팀 대기하셈')
+      
+File "<ipython-input-3-309a1c1e2c63>", line 26
+   print('1인용 클린벤치 사용 팀은', self.items1[len(self.items1)],'이고', self.cl1,'팀 대기중임' ``
+                                                                                 ^
+SyntaxError: invalid syntax
+​
+=========바뀐 주제================
+
+유전파트에 관련된 주제로 전향하기로 했음. 유전자의 발현 여부를 알려주는 프로그램 ( 예를 들면 가능한 혈액형, 알코올 분해효소 유형, 반성유전이나 모계유전병을 이어받았을 확률이나 항생제 저항성 유전자가 발현될 확률 등등) DNA 염기서열 자체를 분석하여 유전자 가위 기술을 이용해 잘려지는 염기서열 파악 하기 중에 후자로 하기로 결정함
+
+생물 유전자 서열에서 돌연변이가 존재할 경우, 이 서열을 찾아내고 돌연변이 염기 서열에 상보적인 탐침 만들기
+
+코드 도식화:
+각 염기 수소결합을 일정한 확률로 떼어지게 설정한다.
+떨어진 염기 서열은 제거하고, 다른 list에 옮겨놓는다.
+Stack함수를 통해 상보적인 염기서열을 구한다. -탐침이 된다.
+A-T결합이 C-G결합보다 약하므로 떼어질 확률을 더 크게 한다.
+
+코드 설정하기
+1차코드
+#2019.05.21
+#염기 서열 :ATCC
+import random
+for i in 'ATCC':
+	z = [["None", 0], ['A', 20], ['T', 40], ['C', 70], ['C', 100]]
+f = random.randint(0, 100)
+for i in range(len(z)):
+	if f <= z[i][1]:
+    	print('ATCC'.split(z[i][0]))
+    	break
+-염기 서열을 설정한 채로 갈라지는 코드를 만들었다.
+-순차적인 확률 설정을 하였다.
+-염기서열이 여러 부분으로 갈라지도록 split 함수를 사용하였다.
+
+보완할 점
+-총 확률이 1이 되지 않더라도 각각의 염기에 대해 독립적으로 확률 결정이 되게 하고 싶다.
+-split말고 list에서의 pop과 같은 역할을 해내고 싶다.
+-임의의 염기서열에 대해서도 하고 싶다.
+
+2차코드
+선생님 피드백 : 1~10의 숫자를 random으로 뽑아서 4이상이면 제거하는 등 확률을 개별 조정할 수 있다.
+
+import random
+li=[]
+a='ATCC'
+for i in a:
+	if i =='A':
+    	x=random.choice([1,2,3,4,5,6,7,8,9,10])
+    	if x<=6:
+        	li.append['A']
+print(li)
+-------------오류남 ㅡ,,ㅡ
+
+쌤의 코드 다듬어주기 월클
+import random
+i=[]
+o=list('ATCC')
+for j in o :
+	if j =='A':
+    	x=random.randint(1,10)
+    	if x<=6:
+        	o.remove('A')
+        	i.append('A')
+print(o, i)
+ 
+-’A’의 경우에 대해서만 확인
++A-T결합은 수소결합 2개, G-C결합은 수소결합 3개 떨어지는 확률은 ½:1/3으로 함
+
+
+
+
+
+
+
+
+
+
+import random
+i=[]
+o=list('ATCC')
+for j in o :
+	if j =='A':
+    	x=random.randint(1,10)
+    	if x<=6:
+        	o.remove('A')
+        	i.append('A')
+	if j =='T':
+    	x=random.randint(1,10)
+    	if x<=6:
+        	o.remove('T')
+        	i.append('T')
+	if j =='C':
+    	x=random.randint(1,10)
+    	if x<=4:
+        	o.remove('C')
+        	i.append('C')
+	if j =='G':
+    	x=random.randint(1,10)
+    	if x<=4:
+        	o.remove('G')
+        	i.append('G')
+print(o, i)
+str1 = ''.join(o)
+str2 = ''.join(i)
+print('고친 후 서열은',str1,'돌연변이 서열은',str2)
+
+코드시행결과
+['A', 'C'] ['T', 'C']
+고친 후 서열은 AC 돌연변이 서열은 TC 
+
+-ATCC에 대해 성공 
+코드 길이를 줄이기
+
+import random
+i=[]
+o=list(input())
+for j in o :
+	if j =='A' or 'T':
+    	x=random.randint(1,10)
+    	if x<=6:
+        	o.remove(j)
+        	i.append(j)
+	if j =='C' or 'G':
+    	x=random.randint(1,10)
+    	if x<=4:
+        	o.remove(j)
+        	i.append(j)
+print(o, i)
+str1 = ''.join(o)
+str2 = ''.join(i)
+print('고친 후 서열은',str1,'돌연변이 서열은',str2)
+
+코드시행결과
+ATGATCG
+['T', 'T', 'C', 'G'] ['A', 'A', 'G']
+고친 후 서열은 TTCG 돌연변이 서열은 AAG
+임의의 염기 서열에 대해 해냈다
+
+추가 탐구과제
+유전자 가위 기술과 유사하게 코드로 구현
+메커니즘
+임의의 염기 서열을 입력받는다.
+염기 수소결합 각각의 세기를 랜덤으로 결정한다.
+가장 약한 수소결합 2개를 골라서 가위로 잘라낸다.
+
+2019.05.28
+유전자 결합에 dic으로 값 대응
+(A,T:G,c=3:2)
+import random
+i=[]
+o=list(input())
+a=0
+b=0
+dic={}
+for j in o :
+    if j =='A' or 'T':
+        x=random.randint(1,10)
+        if x<=6:
+            a+=1
+    if j =='C' or 'G':
+        x=random.randint(1,10)
+        if x<=4:
+            b+=1
+    for i in o:
+        if o=='A' or 'T':
+            dic[o]='int( a/2(a+b) )'
+        else:
+            dic[o]='int( b/2(a+b) )'
+
+print(a,b)
+------->딕셔너리에 안넣어짐 ……
+
+딕셔너리에 넣어지는 코드를 만들었다. 오류수정함
+import random
+i=[]
+o=list(input())
+a=0
+b=0
+dic={}
+for j in o :
+    if j =='A' or 'T':
+        x=random.randint(1,10)
+        if x<=6:
+            a+=1
+    if j =='C' or 'G':
+        x=random.randint(1,10)
+        if x<=4:
+            b+=1
+            
+dic1=0.5*a/(a+b)
+dic2=0.5*b/(a+b)
+
+print(dic1)
+for i in range(1,len(o)):
+    if o[i]=='A' or 'T':
+        dic[o[i]]='dic1'
+    else:
+        dic[0[i]]='dic2'
+        
+print(a,b)
+dic
+
+수정
+
+import random
+i=[]
+o=list(input())
+a=0
+b=0
+dic={}
+for j in range(1,len(o)) :
+    if o[j] in 'AT' :
+        x=random.randint(1,10)
+        if x<=6:
+            dic[o[j]]='dic1'
+            a+=1
+        else:
+            dic[o[j]]='0'
+    if o[j] in 'CG':
+        y=random.randint(1,10)
+        dic[o[j]]='y'
+        if x<=4:
+            dic[o[j]]='dic2'
+            b+=1
+        else:
+            dic[o[j]]='0'
+            
+dic1=a/(a+b)
+dic2=b/(a+b)
+
+print(dic1)
+print(dic2)
+#for i in range(1,len(o)):
+   # if o[i]=='A' or 'T':
+    #    dic[o[i]]='dic1'
+    #else:
+     #   dic[0[i]]='dic2'
+        
+print(a,b)
+dic
+
+딕셔너리는 같은 값에 대해 대응을 2번 할 수 없었다고 한다 … 리스트로 전향
+
+import random
+i=[]
+Y=[]
+o=list(input())
+a=0
+b=0
+dic={}
+for j in range(len(o)) :
+    if o[j] == 'A' or o[j] == 'T' :
+        r_no = random.randint(1,10)
+        if r_no <= 6:
+            a+=r_no
+        else:
+            r_no=0
+        i.append([o[j], r_no])
+    if o[j] == 'C' or o[j] =='G':
+        r_no = random.randint(1,10)
+        if r_no <= 4:
+            b+=r_no
+        else:
+            r_no=0
+        i.append([o[j], r_no])
+print(a)
+print(b)
+
+for k in range(len(i)):
+    if a+b!=0:
+        i[k][1]=(i[k][1])/(a+b)
+
+i
+
+-이 코드로 말하자면
+처음에 minimum값 2개를 설정하려 했으나
+딕셔너리를 사용하는 과정에서
+같은 문자를 못 대응시킨다는 것을 인지
+리스트로 전향
+minimum값 대응에 실패
+염기서열이 갈라질 확률만 계산
+사실 알고보니 list말고 tuple을 사용
+고침
+확률을 비교해서 돌연변이 염기서열이 잘리는지 알아냄
+
+
+
+
